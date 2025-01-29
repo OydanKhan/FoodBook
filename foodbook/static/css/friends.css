@@ -1,0 +1,330 @@
+.lists-container {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    /* background-color: aqua; */
+}
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    gap: 1em;
+    margin: 0em 0.5em;
+    /* background-color: antiquewhite; */
+}
+
+.vertical-line {
+    width: 1px;
+    background-color: black;
+}
+
+.invites-list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    gap: 1em;
+    margin: 0em 0.5em;
+    /* background-color: bisque; */
+}
+.friends-container {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center the items */
+    gap: 1.5em; /* Add space between the items */
+}
+
+
+.friends-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    /* background-color: yellow; */
+    width: 75%; /* 75% so it is not quite as big as list items */
+}
+/* 
+.friend-item {
+    background-color: #F85E00;
+    width: 90%;
+    text-align: center; 
+    padding: 1.2em 0em; 
+    border-radius: 50px;
+    cursor: pointer;
+    margin-bottom: 1.5em; 
+    display: block;
+} */
+
+.friend-item:hover { /* on hover, go darker */
+    /* background-color: green; */
+    background-color: #BD3F00;
+}
+
+.dine-invite-item {
+    display:flex;
+    /* align-items: center; */
+    /* background-color: red; */
+    background-color: #FFD29D;
+    /* width: 100%; */
+    width: 90%;
+    /* justify-content: center; center the content of the "dine buddy invite" */
+    padding: 1.2em 0em; /* pad with "em" - related to font size */
+    gap: 1em;
+    justify-content: space-evenly;
+}
+
+.friend-invite-item {
+    display:flex;
+    /* background-color: purple; */
+    background-color: #FFD29D;
+    /* width: 100%; */
+    width: 90%;
+    /* justify-content: center; center the content of the "friend invite" */
+    padding: 1.2em 0em; /* pad with "em" - related to font size */ 
+    gap: 1em;
+    justify-content: space-evenly;
+}
+
+.status {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    /* margin-left: 1em; */
+    /* margin-top: 20px; */
+
+}
+
+.lists-container h2 {
+    margin: 0.3em 0em;
+    font-family: "Cherry Bomb One", system-ui;
+    font-size: 40px;
+    color: #A41623;
+}
+
+.invites-list h3 {
+    /* border-radius: 50px; */
+    /* background-color: blueviolet; */
+    /* background-color: #F85E00; */
+    width: 60%;
+    height: 2em;
+    text-align: center;
+    font-size: 20px;
+    line-height: 2em; /* this vertically centers the line, same line-height as height */
+    /* margin-left: 2em; */
+}
+
+.add-friend {
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.add-friend a {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: capitalize;
+    text-decoration: none;
+    color: white;
+    background-color: #FF6347; /* Tomato red */
+    border-radius: 25px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Hover Effect */
+.add-friend a:hover {
+    background-color: #FF4500; /* Darker red */
+    transform: scale(1.05); /* Slight zoom-in effect */
+    text-decoration: none;
+    color: white;
+}
+
+.status button {
+    /* height: 3em; */
+    /* padding: 0.5em 1em;  */
+    height: 100%;
+    width: 5em;
+    /* padding: 0em 1em; */
+    /* vertical-align: middle;
+    text-align:center; */
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border-width: 0px;
+    color: white;
+    font-size: 16px;
+
+}
+
+.status-icon {
+    /* height: 3em; */
+    /* padding: 0.5em 1em;  */
+    height: 100%;
+    width: 7em;
+    /* padding: 0em 1em; */
+    /* vertical-align: middle;
+    text-align:center; */
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+}
+
+
+.friends-list .friend-item:hover {
+    background-color: #BD3F00;
+    transform: scale(1.02);
+}
+
+
+
+.friends-list .friend-item button:hover {
+    background-color: #D32F2F;
+}
+
+
+/* .status .decline-button {
+    
+} */
+
+.invite-spacer {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-weight: bolder;
+    /* color: green; */
+    height: 2em;
+    width: 100%;
+}
+.invite-spacer p {
+    background-color: #F85E00;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+}
+
+.accept-dine-button {
+    background-color: green;
+}
+
+.accept-dine-button:hover {
+    background-color: rgb(0, 78, 0);
+    cursor: pointer;
+}
+
+.decline-dine-button {
+    background-color: red;
+}
+
+.decline-dine-button:hover {
+    background-color: rgb(139, 14, 0);
+    cursor: pointer;
+}
+
+.status-banner {
+    display: none;
+    height: 100%;
+    width: 7em;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.status-banner-hidden {
+    display: none;
+    height: 100%;
+    width: 7em;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.dine-invite-item .status-banner-hidden {
+    display: none;
+}
+
+.friend-item {
+    background-color: #F85E00;
+    width: 90%;
+    padding: 1em;
+    border-radius: 20px;
+    margin-bottom: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative; /* For absolute positioning of the delete button */
+
+}
+
+.friend-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    margin-left: 10px;
+}
+
+.delete-button {
+    background-color: #FF3B30;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-right: 10px; /* Add spacing between name and button */
+    position: absolute; /* Position the button absolutely inside the friend-item */
+    right: 10px; /* Align the button 10px from the right */
+    top: 50%; /* Center the button vertically */
+    transform: translateY(-50%); /* Adjust for proper vertical centering */
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #D32F2F;
+}
+.accept-button,
+.decline-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+/* Accept Button */
+.accept-button {
+    background-color: #32CD32; /* Green */
+    color: white;
+}
+
+.accept-button:hover {
+    background-color: #228B22; /* Darker green */
+    transform: scale(1.05);
+}
+
+/* Decline Button */
+.decline-button {
+    background-color: #FF6347; /* Red-orange */
+    color: white;
+}
+
+.decline-button:hover {
+    background-color: #FF4500; /* Darker red-orange */
+    transform: scale(1.05);
+}

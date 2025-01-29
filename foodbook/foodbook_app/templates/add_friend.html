@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Add Friends{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/add_friend.css' %}">
+    <!-- Add jQuery for Ajax support -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<html>
+<head>
+    <title>Add Friends</title>
+</head>
+<body>
+    <h2>Add a Friend</h2>
+
+    <!-- Search Form -->
+    <form action="{% url 'add_friend' %}" method="GET">
+        <input type="text" name="q" placeholder="Search for friends..." value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Search Results -->
+    {% if results %}
+        <h3>Search Results:</h3>
+        <ul class = "search-results-list">
+            {% for user in results %}
+                <li class = "search-result-item">
+                    {{ user.username }}
+                    <button type="button" class="add-friend-btn" data-uid="{{ user.UId }}">Add Friend</button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif request.GET.q %}
+        <p>No users found matching your search.</p>
+    {% endif %}
+
+    <!-- Popup modal -->
+    <div id="popup" style="display: none;">
+        <p>Request Sent!</p>
+        <button id="closePopup">Close</button>
+    </div>
+
+    <script>
+        // Listen for add friend button clicks
+        $(document).ready(function () {
+            $('.add-friend-btn').click(function () {
+                const toUserId = $(this).data('uid'); // Get user ID from button's data attribute
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'send_friend_request' %}",  // Ensure this URL pattern is correct
+                    data: {
+                        'to_user_id': toUserId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    success: function (response) {
+                        // Show popup
+                        $('#popup').show();
+                    },
+                    error: function (xhr, status, error) {
+                        $('#popup').show();
+                    }
+                });
+            });
+
+            // Close popup
+            $('#closePopup').click(function () {
+                $('#popup').hide();
+            });
+        });
+    </script>
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% load static %}
+{% load dict_filter %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ friend.username }}'s Profile</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css\friend_profile.css' %}">
+    <script src="{% static 'js/like-dislike.js' %}" defer></script>
+    <script src="{% static 'js/bookmark.js' %}" defer></script>
+    <script src="{% static 'js/dine_buddy.js' %}" defer></script>
+    <script src="{% static 'js/ajax.js' %}" defer></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css\dine_buddy.css' %}">
+
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-pic-container">
+
+            <img src="{% if user.profile_pic %}{{ user.profile_pic.url }}
+                    {% else %}{% static 'images/default_user.png' %}{% endif %}" 
+                 alt="User Avatar" class="profile-avatar">
+
+        </div>
+        <div class="profile-info">
+            <h1>{{ friend.username }}</h1>
+            <p>{{ friend.bio }}</p>
+        </div>
+    </div>
+
+    <!-- Liked Restaurants Section -->
+    <div class="restaurant-wrapper">
+        <h2>Liked Restaurants</h2>
+        <div class="horizontal-scroll">
+            <section class="cards">
+                {% if liked_restaurants %}
+                    {% for restaurant in liked_restaurants %}
+                        <div class="restaurant-card">
+                            <div class="restaurant-details">
+                                <h4><b>{{ restaurant.name }}</b></h4>
+                                <p>Liked by {{ restaurant.get_total_likes }} users.</p>
+                            
+                                <!-- Restaurant Image -->
+                                {% if restaurant.get_img_urls_list %}
+                                    <img src="{{ restaurant.get_img_urls_list.0 }}" alt="{{ restaurant.name }}" class="restaurant-img">
+                                {% else %}
+                                    <img src="{% static 'images/default_restaurant.png' %}" alt="restaurant-img">
+                                {% endif %}
+
+                                <div class="restaurant-interactions">
+                            
+                                <div class="grouped-features">
+                                    <!-- Like Button -->
+                                    <button type="button" 
+                                    class="like-button" 
+                                    data-id="{{ restaurant.RId }}"
+                                    data-status="{% if interaction_status|get_item:restaurant.RId == True %}liked{% endif %}">
+                                        <img src="{% static 'images/thumbs-up.png' %}" alt="Thumbs Up Icon">
+                                    </button>
+        
+                                    <!-- Dislike Button -->
+                                    <button type="button" 
+                                    class="dislike-button" 
+                                    data-id="{{ restaurant.RId }}"
+                                    data-status="{% if interaction_status|get_item:restaurant.RId == False %}disliked{% endif %}">
+                                        <img src="{% static 'images/thumbs-down.png' %}" alt="Thumbs Down Icon">
+                                    </button>                 
+                                </div>
+                                <div class="grouped-features">
+                                    <!-- Save Button -->
+                                    <button type="button" class="bookmark-button" data-id="{{ restaurant.RId }}">
+                                        <img src="{% static 'images/bookmark.png' %}" alt="Bookmark Icon" class="bookmark">
+                                    </button>
+                                    <!-- Dine Buddy Button -->
+                                    <button type="button" class="dine-buddy-button" data-id="{{ restaurant.RId }}" data-name="{{ restaurant.name }}"
+                                    data-is-auth="{{ user.is_authenticated }}" data-login="{{ login_redirect }}">
+                                        <img src="{% static 'images/dine-buddy-icon.png' %}" alt="Dine Buddy Icon">
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No liked restaurants to display.</p>
+                {% endif %}
+            
+            </section>
+        </div>
+    </div>
+    
+<!-- Disliked Restaurants -->
+    <div class="restaurant-wrapper">
+        <h2>Disliked Restaurants</h2>
+        <div class="horizontal-scroll">
+            <section class="cards">
+                {% if disliked_restaurants %}
+                    {% for restaurant in disliked_restaurants %}
+                        <div class="restaurant-card">
+                            <div class="restaurant-details">
+                                <h4><b>{{ restaurant.name }}</b></h4>
+                                <p>Liked by {{ restaurant.get_total_likes }} users.</p>
+                            
+                                <!-- Restaurant Image -->
+                                {% if restaurant.get_img_urls_list %}
+                                    <img src="{{ restaurant.get_img_urls_list.0 }}" alt="{{ restaurant.name }}" class="restaurant-img">
+                                {% else %}
+                                    <img src="{% static 'images/default_restaurant.jpeg' %}" alt="restaurant-img">
+                                {% endif %}
+
+                                <div class="restaurant-interactions">
+                            
+                                <div class="grouped-features">
+                                    <!-- Like Button -->
+                                    <button type="button" 
+                                    class="like-button" 
+                                    data-id="{{ restaurant.RId }}"
+                                    data-status="{% if interaction_status|get_item:restaurant.RId == True %}liked{% endif %}">
+                                        <img src="{% static 'images/thumbs-up.png' %}" alt="Thumbs Up Icon">
+                                    </button>
+        
+                                    <!-- Dislike Button -->
+                                    <button type="button" 
+                                    class="dislike-button" 
+                                    data-id="{{ restaurant.RId }}"
+                                    data-status="{% if interaction_status|get_item:restaurant.RId == False %}disliked{% endif %}">
+                                        <img src="{% static 'images/thumbs-down.png' %}" alt="Thumbs Down Icon">
+                                    </button>                 
+                                </div>
+                                <div class="grouped-features">
+                                    <!-- Save Button -->
+                                    <button type="button" class="bookmark-button" data-id="{{ restaurant.RId }}">
+                                        <img src="{% static 'images/bookmark.png' %}" alt="Bookmark Icon" class="bookmark">
+                                    </button>
+                                    <!-- Dine Buddy Button -->
+                                    <button type="button" class="dine-buddy-button" data-id="{{ restaurant.RId }}" data-name="{{ restaurant.name }}">
+                                        <img src="{% static 'images/dine-buddy-icon.png' %}" alt="Dine Buddy Icon">
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No liked restaurants to display.</p>
+                {% endif %}
+            
+            </section>
+        </div>
+    </div>
+
+
+<!-- pop up for dine buddy request -->
+<div class="pop-up-container" id="pop-up-container">
+    <div class="pop-up" id="pop-up">
+        <div class="pop-up-header">
+            <h2 id="pop-up-title">Invite your friends</h2>
+            <span class="close-pop-up" id="close-pop-up">&times;</span> <!-- X to close the popup -->
+        </div>
+        <div class="pop-up-content">
+            <!-- for each friend, make a list item -->
+            {% for friend in friends %}
+            <div class="friend-option">
+                <input name="{{ friend }}" type="checkbox" class="friend-checkbox" data-id="{{ friend.UId }}"> {{ friend }}
+                <label for="{{ friend }}">{{ friend }}</label>
+            </div>
+            {% endfor %}
+            <!-- <div class="friend-option">
+                <input name="friend" type="checkbox">
+                <label for="friend">Friend</label>
+            </div>
+            <div class="friend-option">
+                <input name="friend" type="checkbox">
+                <label for="friend">Friend</label>
+            </div> -->
+            <button id="send-invites-button" data-friends="{{ friends }}">Send invites separately</button>
+        </div>
+
+    </div>
+</div>
+    
+</body>
+{% endblock %}

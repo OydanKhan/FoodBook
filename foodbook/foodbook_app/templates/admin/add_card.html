@@ -1,0 +1,113 @@
+{% extends "admin/admin_base.html" %}
+{% load static %}
+{% load dict_filter %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css\admin\home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css\dine_buddy.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css\admin\edit.css' %}">
+    <script src="{% static 'js/like-dislike.js' %}" defer></script>
+    <script src="{% static 'js/bookmark.js' %}" defer></script>
+    <script src="{% static 'js/dine_buddy.js' %}" defer></script>
+    <script src="{% static 'js/dropDownFilters.js' %}" defer></script>
+    <script src="{% static 'js/ajax.js' %}" defer></script>
+
+</head>
+
+
+<div class="container">
+    <div class="image-container">
+        {% if restaurant.get_img_urls_list %}
+            <img src="{{ restaurant.get_img_urls_list.0 }}" alt="{{ restaurant.name }}" class="restaurant-img">
+        {% else %}
+            <img src="{% static 'images/default_restaurant.png' %}" alt="Default Restaurant Image" class="restaurant-img">
+        {% endif %}
+    </div>
+
+<div class="container">
+    <div class="line"></div>
+    <form method="post" class="details" onsubmit="return validateForm()" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>Add Restaurant</h1>
+        <div id="error-message" style="color: red; display: none; margin-top: 10px; margin-bottom: 10px; font-family: Verdana, sans-serif;"></div> 
+        <label for="name">Restaurant Name:</label>
+        <input type="text" id="name" name="name"  required>
+
+        <label for="name">Cuisine:</label>
+        <input type="text" id="cuisine" name="cuisine" required>
+
+        <label for="postal_code">Postal Code:</label>
+        <textarea id="postal_code" name="postal_code" required></textarea>
+        
+        <label for="price">Price:</label>
+        <select id="price" name="price" style="width: 100%; padding: 8px; margin-top: 5px;" required>
+            <option value="$" {% if restaurant.price == "$" %}selected{% endif %}>$</option>
+            <option value="$$" {% if restaurant.price == "$$" %}selected{% endif %}>$$</option>
+            <option value="$$$" {% if restaurant.price == "$$$" %}selected{% endif %}>$$$</option>
+        </select>
+
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" >
+        
+        
+
+        <button type="submit">Save Changes</button>
+        <a href="{% url 'admin_home' %}" class="styled-link">Cancel</a>
+    </form>
+</div>
+
+
+
+<script>
+    let currentIndex = 0;
+
+    function changeImage(direction) {
+        const images = document.querySelectorAll('.restaurant-image');
+        images[currentIndex].classList.add('hidden'); 
+        currentIndex = (currentIndex + direction + images.length) % images.length; 
+        images[currentIndex].classList.remove('hidden'); 
+    }
+
+</script>
+
+
+<script>
+    function validateForm() {
+        const name = document.getElementById('name').value.trim();
+        const cuisine = document.getElementById('cuisine').value.trim();
+        const postalCode = document.getElementById('postal_code').value.trim();
+        const price = document.getElementById('price').value;
+        const image = document.getElementById('image').files.length > 0;
+    
+        let errorMessage = '';
+    
+        if (!name) {
+            errorMessage += 'Please enter the restaurant name.<br>';
+        }
+        if (!cuisine) {
+            errorMessage += 'Please enter the cuisine.<br>';
+        }
+        if (!postalCode || !/^\d{4}$/.test(postalCode)) {  // Check if it's a four-digit integer
+            errorMessage += 'Please enter a valid four-digit postal code.<br>';
+        }
+        if (!price) {
+            errorMessage += 'Please select a price.<br>';
+        }
+    
+        if (errorMessage) {
+            document.getElementById('error-message').innerHTML = errorMessage;
+            document.getElementById('error-message').style.display = 'block';
+            return false; // Prevent form submission
+        }
+    
+        return true; // Allow form submission
+    }
+</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Login{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css\login.css' %}">
+</head>
+
+
+<div class="login-container">
+  <div class="login-box">
+
+      <h2 class="login-title">Login</h2>
+
+      <form method="post" class="login-form">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+              <div class="error-message">
+                  {% for error in form.non_field_errors %}
+                      <p>{{ error }}</p>
+                  {% endfor %}
+              </div>
+          {% endif %}
+
+          <div class="form-group">
+              {{ form.username.label_tag }}
+              {{ form.username }}
+              {% if form.username.errors %}
+                  <div class="error-message">
+                      {% for error in form.username.errors %}
+                          <p>{{ error }}</p>
+                      {% endfor %}
+                  </div>
+              {% endif %}
+          </div>
+          <div class="form-group">
+              {{ form.password.label_tag }}
+              {{ form.password }}
+              {% if form.password.errors %}
+                  <div class="error-message">
+                      {% for error in form.password.errors %}
+                          <p>{{ error }}</p>
+                      {% endfor %}
+                  </div>
+              {% endif %}
+          </div>
+          <button type="submit" class="login-button">Login</button>
+      </form>
+
+      <div class="links">
+          <p>Don't have an account? <a href="{% url 'register' %}">Register here</a>.</p>
+      </div>
+      <!-- OR
+      <a href="% provider_login_url 'google' %">Login with Google</a> -->
+  </div>
+</div>
+{% endblock %}

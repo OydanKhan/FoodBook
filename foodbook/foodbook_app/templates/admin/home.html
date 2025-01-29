@@ -1,0 +1,263 @@
+{% extends "admin/admin_base.html" %}
+{% load static %}
+{% load dict_filter %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Home{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css\admin\home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css\dine_buddy.css' %}">
+    <script src="{% static 'js/like-dislike.js' %}" defer></script>
+    <script src="{% static 'js/bookmark.js' %}" defer></script>
+    <script src="{% static 'js/dine_buddy.js' %}" defer></script>
+    <script src="{% static 'js/dropDownFilters.js' %}" defer></script>
+    <script src="{% static 'js/ajax.js' %}" defer></script>
+</head>
+
+<!-- Search Bar -->
+<div class="search-bar">
+    <form method="get" action="{% url 'admin_home' %}" class="search-container">
+        <input type="text" class="search-input" name="search" placeholder="Search by Name or Cuisine" value="{{ request.GET.search|default:'' }}">
+        
+        <!-- Filters -->
+        <div class="filters">
+            <input type="text" id="postalCode" class="filter" name="postal_code" placeholder="Postal Code" value="{{ request.GET.postal_code|default:'' }}">
+            
+            <input type="text" class="filter" name="liked_by" placeholder="Liked By" value="{{ request.GET.liked_by|default:'' }}">
+
+            <div class="dropdown-menu">
+                <button id="priceDropdown" class="dropdown-button" onclick="toggleDropDown('priceDropdownContent', event)">
+                    Price <span class="selected-options"></span> <span class="arrow">&#9662;</span>
+                </button>
+                <div id="priceDropdownContent" class="dropdown-content">
+                    <label>
+                        <input name="price" value="$" class="sort-option" type="checkbox" {% if "$" in request.GET.price %}checked{% endif %}>
+                        $ 
+                    </label><br>
+                    <label>
+                        <input name="price" value="$$" class="sort-option" type="checkbox" {% if "$$" in request.GET.price %}checked{% endif %}>
+                        $$ 
+                    </label><br>
+                    <label>
+                        <input name="price" value="$$$" class="sort-option" type="checkbox" {% if "$$$" in request.GET.price %}checked{% endif %}>
+                        $$$ 
+                    </label><br>
+                </div>
+            </div>
+
+            <div class="dropdown-menu">
+                <button id="sortDropdown" class="dropdown-button" onclick="toggleDropDown('sortDropdownContent', event)">
+                    Sort By <span class="selected-options"></span> <span class="arrow">&#9662;</span>
+                </button>
+                <div id="sortDropdownContent" class="dropdown-content">
+                    <label>
+                        <input type="checkbox" name="sort" value="friends" class="sort-option" {% if "friends" in request.GET.sort %}checked{% endif %}>
+                        Liked by Friends
+                    </label><br>
+                    <label>
+                        <input type="checkbox" name="sort" value="most_liked" class="sort-option" {% if "most_liked" in request.GET.sort %}checked{% endif %}>
+                        Most Liked
+                    </label><br>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="search-button">Go</button>
+    </form> 
+    <!-- Add button -->
+    <form method="post" action="{% url 'add_restaurant' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="delete-button">
+            <img src="{% static 'images/plus_icon.png' %}" alt="Add Icon" class="delete-icon">
+        </button>
+    </form> 
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+</div>
+
+
+
+<!--  -->
+
+<!-- restaurant cards -->
+<div class="restaurant-wrapper">
+    <section class="cards">
+        {% for restaurant in page_object %}
+            <!-- indiviual restaurant card -->
+            <div class="restaurant-card">
+                <div class="restaurant-details">
+                    <h4><b>{{ restaurant.name }}</b></h4>
+                    <p>Liked by {{ restaurant.get_total_likes }} users.</p>
+                    
+                    {% if restaurant.RId %}
+                     <div class="restaurant-CRUD">
+                        <!-- Delete button -->
+                        <form id="delete-form-{{ restaurant.RId }}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="button" class="delete-button" onclick="deleteRestaurant('{{ restaurant.RId }}')">
+                                <img src="{% static 'images/delete_icon.png' %}" alt="Delete Icon" class="delete-icon">
+                            </button>
+                        </form>
+
+                        <!-- Edit button -->
+                        <form method="get" action="{% url 'edit_restaurant' restaurant.RId %}" style="display:inline;">
+                            <button type="submit" class="delete-button">
+                                <img src="{% static 'images/edit_icon.png' %}" alt="Edit Icon" class="delete-icon">
+                            </button>
+                        </form>    
+  
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Restaurant Image -->
+                {% if restaurant.get_img_urls_list %}
+                        <img src="{{ restaurant.get_img_urls_list.0 }}" alt="{{ restaurant.name }}" class="restaurant-img">
+                    {% else %}
+                        <img src="{% static 'images/default_restaurant.png' %}" alt="restaurant-img">
+                    {% endif %}
+
+                    
+                <div class="restaurant-interactions">
+
+                    <div class="grouped-features">
+                        <!-- Like Button -->
+                        <button type="button" 
+                        class="like-button" 
+                        data-id="{{ restaurant.RId }}"
+                        data-status="{% if interaction_status|get_item:restaurant.RId == True %}liked{% endif %}">
+                            <img src="{% static 'images/thumbs-up.png' %}" alt="Thumbs Up Icon">
+                        </button>
+
+                        <!-- Dislike Button -->
+                        <button type="button" 
+                        class="dislike-button" 
+                        data-id="{{ restaurant.RId }}"
+                        data-status="{% if interaction_status|get_item:restaurant.RId == False %}disliked{% endif %}">
+                            <img src="{% static 'images/thumbs-down.png' %}" alt="Thumbs Down Icon">
+                        </button>                      
+                    </div>
+
+                    <div class="grouped-features">
+                        <!-- Save Button -->
+                        <button type="button" class="bookmark-button" data-id="{{ restaurant.RId }}">
+                            <img src="{% static 'images/bookmark.png' %}" alt="Bookmark Icon" class="bookmark">
+                        </button>
+                        <!-- Dine Buddy Button -->
+                        <button type="button" class="dine-buddy-button" data-id="{{ restaurant.RId }}" data-name="{{ restaurant.name }}"
+                        data-is-auth="{{ user.is_authenticated }}" data-login="{{ login_redirect }}">
+                            <img src="{% static 'images/dine-buddy-icon.png' %}" alt="Dine Buddy Icon">
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+</div>
+
+<br>
+
+<!-- page number navigation -->
+<div class="pagination">
+    <span class="step-links">
+        <!-- if user is not on the first page -->
+        {% if page_object.has_previous %}
+            <a href="?page=1">first</a> <!-- sets first link to page 1 -->
+            <a href="?page={{ page_object.previous_page_number }}">previous</a> <!-- sets previous link to page before current -->
+        {% endif %}
+
+        <!-- displays what page user is on currently -->
+        <span class="current"> Page {{ page_object.number }} of {{ page_object.paginator.num_pages }} </span>
+
+        <!-- if user is not on the last page  -->
+        {% if page_object.has_next %}
+            <a href="?page={{ page_object.next_page_number }}">next</a> <!-- sets next link to page after current -->
+            <a href="?page={{ page_object.paginator.num_pages }}">last</a> <!-- sets last link to last page --> 
+        {% endif %}
+    </span>
+</div>
+ 
+<!-- pop up for dine buddy request -->
+<div class="pop-up-container" id="pop-up-container">
+    <div class="pop-up" id="pop-up">
+        <div class="pop-up-header">
+            <h2 id="pop-up-title">Invite your friends</h2>
+            <span class="close-pop-up" id="close-pop-up">&times;</span> <!-- X to close the popup -->
+        </div>
+        <div class="pop-up-content">
+            <!-- for each friend, make a list item -->
+            <div class="friend-scroll">
+                {% for friend in friends %}
+                <div class="friend-option">
+                    <input name="{{ friend }}" type="checkbox" class="friend-checkbox" data-id="{{ friend.UId }}"> {{ friend }}
+                    <label for="{{ friend }}">{{ friend }}</label>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- <div class="friend-option">
+                <input name="friend" type="checkbox">
+                <label for="friend">Friend</label>
+            </div>
+            <div class="friend-option">
+                <input name="friend" type="checkbox">
+                <label for="friend">Friend</label>
+            </div> -->
+            <div class="dine-notification" id="dine-sent-notification">
+                <p>Invite sent!</p>
+            </div>
+            <button id="send-invites-button" data-friends="{{ friends }}">Send invites separately</button>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    function deleteRestaurant(restaurantId) {
+        const form = document.getElementById(`delete-form-${restaurantId}`);
+        if (form) {
+            event.preventDefault();  // this prevents the form from submitting when the delete button is clicked
+    
+            if (confirm('Are you sure you want to delete this restaurant?')) {
+                fetch(`/admin-dashboard/delete_restaurant/${restaurantId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()  
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        const restaurantCard = document.querySelector(`.restaurant-card[data-id="${restaurantId}"]`);
+                        if (restaurantCard) {
+                            restaurantCard.remove();
+                        }
+                        window.location.reload();
+                    } else {
+                        return response.text().then(text => {
+                            console.error('Error:', text);
+                            alert('An error occurred while trying to delete the restaurant.');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    alert('An error occurred while trying to delete the restaurant.');
+                });
+            }
+        }
+    }
+    
+    function getCSRFToken() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+    </script>
+
+{% endblock %}

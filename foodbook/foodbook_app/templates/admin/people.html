@@ -1,0 +1,74 @@
+{% extends "admin/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin People{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css\admin\people.css' %}">
+</head>
+
+<h1>People</h1>
+<div class="people-wrapper">
+    {% for user in users %}
+        {% if user != current_user %}
+            <div class="people-card">
+                <div class="user-info">
+                    <img src="{% if user.profile_pic %}{{ user.profile_pic.url }}
+                    {% else %}{% static 'images/default_user.png' %}{% endif %}" alt="Profile Picture" class="profile-pic">
+
+                    <div class="username">
+                        {{ user.username }} 
+                    </div>
+                </div>
+                <div class="admin-actions">
+                    <a href="{% url 'edit_user' user.UId %}" class="edit-icon">
+                        <img src="{% static 'images/edit-icon.png' %}" alt="Edit" class="icon">
+                    </a>
+                    <form action="{% url 'delete_user' user.UId %}" method="POST" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-icon">
+                            <img src="{% static 'images/delete-icon.png' %}" alt="Delete" class="icon">
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="people-card">
+                <div class="user-info">
+                    <img src="{% if user.profile_pic %}{{ user.profile_pic.url }}
+                    {% else %}{% static 'images/default_user.png' %}{% endif %}" alt="Profile Picture" class="profile-pic">
+
+                    <div class="username">
+                        {{ user.username }} 
+                            (You)
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% if page_object.paginator.num_pages > 1 %}
+    <span class="step-links">
+        <!-- if user is not on the first page -->
+        {% if page_object.has_previous %}
+            <a href="?page=1">first</a> <!-- sets first link to page 1 -->
+            <a href="?page={{ page_object.previous_page_number }}">previous</a> <!-- sets previous link to page before current -->
+        {% endif %}
+
+        <!-- displays what page user is on currently -->
+        <span class="current"> Page {{ page_object.number }} of {{ page_object.paginator.num_pages }} </span>
+
+        <!-- if user is not on the last page  -->
+        {% if page_object.has_next %}
+            <a href="?page={{ page_object.next_page_number }}">next</a> <!-- sets next link to page after current -->
+            <a href="?page={{ page_object.paginator.num_pages }}">last</a> <!-- sets last link to last page --> 
+        {% endif %}
+    </span>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,92 @@
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110vh;
+}
+
+
+.register-box {
+    background-color: white;
+    padding: 40px 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    text-align: center;
+    width: 100%;
+    padding-top: 0;
+}
+
+
+.register-title {
+    font-size: 50px;
+    margin-bottom: 30px;
+    color: #A41623;
+    font-family: "Cherry Bomb One", system-ui;
+}
+
+
+.register-form {
+    width: 100%;
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: #FFB563;
+}
+
+
+.register-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #FFB563;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register-button:hover {
+    background-color: #F85E00;
+}
+
+
+.links {
+    margin-top: 20px;
+}
+
+.links a {
+    color: #A41623;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: red;         /* Make the error message red */
+    font-size: 12px;    /* Make the font smaller */
+    display: inline-block;
+    margin-left: 10px;  /* Add some spacing from the input field */
+    float: right;       /* Align the error to the right */
+}

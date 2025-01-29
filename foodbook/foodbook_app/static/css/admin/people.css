@@ -1,0 +1,105 @@
+
+h1 {
+    font-size: 50px;
+    margin-bottom: 70px;
+    color: #A41623;
+    font-family: "Cherry Bomb One", system-ui;
+    text-align: center;
+    padding-top: 50px;
+}
+
+.people-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap; 
+    gap: 20px;  
+    width: 100%;
+    margin: 0 auto; 
+    padding: 20px; 
+    box-sizing: border-box; 
+}
+
+.people-card {
+    flex: 0 1 calc(20% - 20px);  
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+    height: auto; 
+}
+
+.people-card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7);
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    flex: 1; 
+}
+
+
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5px;
+    background: none; 
+    border: 2px solid black;
+}
+
+.username {
+    font-weight: bold;
+    text-align: center;
+}
+
+.admin-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; 
+    gap: 10px;
+}
+
+
+.icon {
+    width: 24px; 
+    height: 24px;
+    cursor: pointer;
+    background: none;
+}
+
+.delete-form {
+    display: inline;
+}
+
+button.delete-icon {
+    background: none; 
+    border: none; 
+    padding: 0; 
+}
+
+/* pagination */
+.pagination {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.pagination .step-links a {
+    color: #A41623;
+    margin: 0 5px;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.pagination .step-links .current {
+    color:#FFB563;
+}

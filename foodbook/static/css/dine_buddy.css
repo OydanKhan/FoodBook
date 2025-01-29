@@ -1,0 +1,210 @@
+
+
+/* Pop up window - dine buddy */
+.pop-up-container {
+    display: none;
+    /* visibility: hidden; */
+    /* position: fixed; */
+    /* background-color: red; */
+    background-color: #F85E00;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    /* position: absolute; */
+    position: fixed;
+    margin: 15vh 25%;
+    /* margin-top: 10vh;
+    margin-bottom: 10vh; */
+    justify-content: center;
+    width: 50%;
+    height: 70vh;
+    /* display: flex; */ /* Make sure to uncomment this if you want to see it */
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border-radius: 20px;
+    /* font-family: Verdana, sans-serif; */
+}
+
+.pop-up {
+    width: 100%;
+    height: 100%;
+    /* background-color: aqua; */
+    background-color: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pop-up-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    gap: 2px;
+    justify-content: space-evenly;
+    /* background-color: #A41623; */
+    height: 100%;
+    margin-bottom: 5%;
+    margin-top: 1%;
+}
+
+.pop-up-header {
+    width: 100%;
+    display: flex;
+    /* justify-content: flex-end; */
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 5px 0px; */
+    /* margin-left: 15px; */
+    /* gap: 110px; */
+    /* background-color: red; */
+    background-color: #F85E00;
+    padding-bottom: 7px;
+}
+
+.pop-up-header h2 {
+    font-size: x-large;
+    /* margin: 0 auto; */
+    /* margin-left: auto; */
+    /* background-color: magenta; */
+    /* width: 100%; */
+    /* flex: 1; */
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#close-pop-up {
+    display: flex;
+    align-self: flex-end;
+    /* background-color: lightgoldenrodyellow; */
+    background-color: #ffd7a9;
+    margin: 15px;
+    width: 15px;
+    height: 15px;
+    /* line-height: 15px; */
+    /* text-align: center; */
+    font-size: x-large;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3.5px;
+    padding-bottom: 7px;
+    padding-right: 5px;
+    padding-left: 5.3px;
+    border-radius: 50%;
+    /* vertical-align: middle; */
+    /* vertical-align: top;
+    line-height: 1; */
+    margin-left: auto;
+    /* z-index: 20; */
+}
+
+#close-pop-up:hover {
+    color: #A41623;
+    cursor: pointer;
+    background-color: #FFB563;
+}
+
+#send-invites-button {
+    background-color: #F85E00;
+    border-width: 0px;
+    padding: 20px 40px;
+    font-size: 20px;
+    width: 45%;
+    /* margin-top: 15px; */
+    justify-items: flex-end;
+    /* margin-top: auto; */
+    margin-top: 2px;
+    border-radius: 10px;
+}
+
+#send-invites-button:hover {
+    background-color: #ff9c5e;
+    color: #A41623;
+    box-shadow: 0px 0px 6px 4px #ddd;
+    cursor: pointer;
+}
+
+.friend-option {
+    display: flex;
+    gap: 50px;
+    /* background-color: cornflowerblue; */
+    background-color: #FFD29D;
+    width: 100%;
+    height: 50px;
+    align-items: center;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.friend-option input[type="checkbox"] {
+    accent-color: #F85E00;
+    size: 10px;
+    transform: scale(3);
+    /* -ms-transform: scale(3); */
+    border-color: #FFB563;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.friend-option label {
+    font-size: 20px;
+}
+
+.dine-notification {
+    display: none;
+    /* display: flex; */
+    /* background-color: blue; */
+    background-color: white;
+    /* padding: 20px; */
+    padding: 20px;
+    width: 85%;
+    justify-content: center;
+    /* align-self: flex-end; */
+    border-radius: 10px;
+    z-index: 50;
+    position: absolute;
+    border: 1px solid #bd9278;
+    box-shadow: 0px 0px 8px #F85E00;
+    
+}
+
+#dine-sent-notification {
+    justify-items: flex-end;
+    margin-top: auto;
+}
+
+.friend-scroll {
+    width: 100%;
+    overflow: auto;
+    /* background-color: blue; */
+    /* background-color: rgb(204, 204, 204); */
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 150px;
+    border-radius: 10px;
+    padding: 5px;
+    border: 2px solid rgb(204, 204, 204);
+}
+
+.friend-scroll::-webkit-scrollbar {
+    appearance: none;
+    height: 5px;
+    border: 1px solid rgb(204, 204, 204);
+    /* width: 15px; */
+    border-radius: 10px;
+}
+
+.friend-scroll::-webkit-scrollbar-thumb {
+    background-color: #F85E00;
+    border-radius: 10px;
+    size: 40px;
+}
+
+.friend-scroll::-webkit-scrollbar-track {
+    /* margin: 0 30px; */
+}

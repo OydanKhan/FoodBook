@@ -1,0 +1,35 @@
+.locked-message-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+.locked-message-container h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #e74c3c; /* A soft red for emphasis */
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.locked-message-container p {
+    font-size: 18px;
+    color: #555; /* A medium gray for readability */
+    line-height: 1.6;
+}
+
+.locked-message-container p a {
+    color: #3498db; /* Soft blue for links */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.locked-message-container p a:hover {
+    text-decoration: underline;
+    color: #2c8ecf; /* Slightly darker blue on hover */
+}

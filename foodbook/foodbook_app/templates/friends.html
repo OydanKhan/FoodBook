@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Feed{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css\friends.css' %}">
+    <script src="{% static 'js/invites.js' %}" defer></script>
+</head>
+
+<div class="lists-container">
+    <div class="friends-list">
+        <div class="friends-header">
+            <h2>Friends</h2>
+            <!-- <p>Add</p> -->
+            <div class="add-friend">
+                <a href="/add_friend" alt="Add friend">+ Add Friend</a>
+            </div>
+        </div>
+         <!-- Loop through each friend and give them their own "friend-item" div -->
+        {% for friend in friends %}
+        <div class="friend-item" onclick="location.href='/friend/{{ friend.UId }}'">
+            <div class="friend-name">{{ friend.username }}</div>
+    
+            <!-- Delete button -->
+            <button class="delete-button" onclick="event.stopPropagation(); confirmDelete('{{ friend.username }}', '{{ friend.UId }}')">
+                ✖
+            </button>
+    
+            <!-- Hidden form for deleting the friend -->
+            <form id="delete-friend-form-{{ friend.UId }}" method="post" action="{% url 'delete_friend' friend.UId %}">
+                {% csrf_token %}
+                <input type="hidden" name="friend_id" value="{{ friend.id }}">
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="vertical-line"></div>
+    <div class="invites-list">
+        <h2>Invites</h2>
+        {% for friend_invite in friend_requests %}
+        <div class="friend-invite-item">
+            <h3>{{ friend_invite.from_user_id.username }}</h3> <!-- Displaying the username of the sender -->
+    
+            <div class="status">
+                <!-- Accept button form -->
+                <form method="post" action="{% url 'accept_friend_request' friend_invite.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="accept-button" data-invite="{{ friend_invite }}" data-id="{{ friend_invite.id }}">Accept</button>
+                </form>
+    
+                <!-- Decline button form -->
+                <form method="post" action="{% url 'decline_friend_request' friend_invite.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="decline-button" data-invite="{{ friend_invite }}" data-id="{{ friend_invite.id }}">Decline</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        {% if friend_requests %}
+        <div class="invite-spacer"></div>
+        {% endif %}
+        {% for dine_invite in received_dine_buddies %}
+        <div class="dine-invite-item">
+            <!-- <h3>Restaurant Name</h3> -->
+             <!-- <p>{{ dine_invite.id }}</p> -->
+            <h3>{{ dine_invite.RID }}: from {{ dine_invite.from_user_id }}</h3>
+            <div class="status">
+                {% if dine_invite.status == "pending" or dine_invite.status == "Pending" %}
+                <!-- pending invite -->
+                <button class="accept-dine-button" data-id="{{ dine_invite.id }}">Accept</button>
+                <!-- data-rid="{{ dine_invite.RID.RId }}" data-to="{{ dine_invite.to_user_id.UId }}" data-from="{{ dine_invite.from_user_id.UId }}" -->
+                <button class="decline-dine-button" data-id="{{ dine_invite.id }}">Decline</button>
+                <!-- hidden status banners-->
+                <div class="status-banner-hidden" id="accepted-banner{{ dine_invite.id }}">Accepted</div>
+                <div class="status-banner-hidden" id="declined-banner{{ dine_invite.id }}">Declined</div>
+                {% elif dine_invite.status == "accepted" or dine_invite.status == "Accepted" %}
+                <!-- accepted invite -->
+                <div class="status-banner" id="accepted-banner{{ dine_invite.id }}">Accepted</div>
+                {% else %}
+                <!-- declined invite -->
+                <div class="status-banner" id="declined-banner{{ dine_invite.id }}">Declined</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% for dine_invite in sent_dine_buddies %}
+        <div class="dine-invite-item">
+            <!-- <h3>Restaurant Name</h3> -->
+            <h3>{{ dine_invite.RID }}: with {{ dine_invite.to_user_id }}</h3>
+            <div class="status">
+                {% if dine_invite.status == "pending" or dine_invite.status == "Pending" %}
+                <!-- pending invite -->
+                <div class="status-icon">Pending...</div>
+                {% elif dine_invite.status == "accepted" or dine_invite.status == "Accepted" %}
+                <!-- accepted invite -->
+                <div class="status-icon" id="accepted">Accepted</div>
+                {% else %}
+                <!-- declined invite -->
+                <div class="status-icon" id="declined">Declined</div>
+                {% endif %}
+                <!-- <button class="accept-button">Accept</button>
+                <button class="decline-button">Decline</button> -->
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    </div>
+</div>
+
+
+<!--  -->
+
+<br>
+
+<!-- page number navigation -->
+<div class="pagination">
+    <span class="step-links">
+        <!-- if user is not on the first page -->
+        {% if page_object.has_previous %}
+            <a href="?page=1">first</a> <!-- sets first link to page 1 -->
+            <a href="?page={{ page_object.previous_page_number }}">previous</a> <!-- sets previous link to page before current -->
+        {% endif %}
+
+        <!-- displays what page user is on currently -->
+        <span class="current"> Page {{ page_object.number }} of {{ page_object.paginator.num_pages }} </span>
+
+        <!-- if user is not on the last page  -->
+        {% if page_object.has_next %}
+            <a href="?page={{ page_object.next_page_number }}">next</a> <!-- sets next link to page after current -->
+            <a href="?page={{ page_object.paginator.num_pages }}">last</a> <!-- sets last link to last page --> 
+        {% endif %}
+    </span>
+</div>
+
+<script>
+    function confirmDelete(username, friendId) {
+        const isConfirmed = confirm(`Are you sure you want to remove ${username} from your friends?`);
+        if (isConfirmed) {
+            document.getElementById(`delete-friend-form-${friendId}`).submit();
+        }
+    }
+</script>
+
+{% endblock %}
+

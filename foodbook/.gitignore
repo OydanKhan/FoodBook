@@ -1,0 +1,16 @@
+db.sqlite3
+__pycache__/
+*.py[cod]
+*.pyd
+migrations/
+.vscode/
+.idea/
+*.log
+venv/
+.env/
+dist/
+staticfiles/
+assets/
+foodbook/foodbook_app/images/
+requirements.txt
+README.md

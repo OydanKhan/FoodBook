@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodbook</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- navigation bar -->
+    <nav>
+        <div class="logo-container">  <!-- logo -->
+            <a href="{% url 'home' %}">
+                <img loading="lazy" src="{% static 'images/FoodBook.png' %}" class="logo" alt="logo">
+            </a>
+        </div>
+        <ul class="nav-links">  <!-- links in the middle -->
+            <li><a href="/feed">feed</a></li>
+            <li><a href="/saved">saved</a></li>
+            <li><a href="/friends">friends</a></li>
+        </ul>
+        <div class="dropdown-menu">
+            <div class="user-icon-container">
+                <button id="userDropdown" class="dropbtn">
+                    <img src="{% if user.profile_pic %}{{ user.profile_pic.url }}
+                    {% else %}{% static 'images/default_user.png' %}{% endif %}" alt="User Icon" class="user-icon">
+                </button>
+                <div id="dropdownContent" class="dropdown-content">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}">View Profile</a>
+                        <div class="logout-button">
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-link">Logout</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}">Sign In</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- error messages -->
+    {% if messages %}
+        <div class="message-container">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="content-container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+<script src="{% static 'js/dropdown.js' %}"></script>
+<script>
+    setTimeout(function() {
+        const messageContainer = document.querySelector('.message-container');
+        if (messageContainer) {
+            messageContainer.style.display = 'none';
+        }
+    }, 3000); // 3 seconds
+
+    // Get the session expiry timestamp from the server-injected variable
+    const sessionExpiryTimestamp = {{ session_expiry_timestamp|default:"null" }};
+
+    // Function to display a pop-up when the session expires
+    function showSessionExpiredPopup() {
+        alert("Your session has expired due to inactivity. Please log in again.");
+        // Redirect to the login page after showing the alert
+        window.location.href = "{% url 'login' %}";
+    }
+
+    // Function to periodically check if the session has expired
+    function checkSessionExpiry() {
+        if (sessionExpiryTimestamp) {
+            const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+            if (currentTime >= sessionExpiryTimestamp) {
+                showSessionExpiredPopup();
+            }
+        }
+    }
+
+    // Periodically check the session status every minute (60000 milliseconds)
+    setInterval(checkSessionExpiry, 60000);
+
+    // Also run the check when the page loads
+    document.addEventListener("DOMContentLoaded", function() {
+        checkSessionExpiry();
+    });
+</script>
+</body>
+</html>

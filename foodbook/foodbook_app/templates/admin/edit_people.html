@@ -1,0 +1,29 @@
+{% extends "admin/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Edit People{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css\admin\edit_people.css' %}">
+</head>
+
+<div class="edit-container">
+    <div class="edit-box">
+        <h1 class="edit-title">Edit User: "{{ user.username }}"</h1>
+
+        <form method="post" enctype="multipart/form-data" class="edit-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            
+            <div class="buttons-container">
+                <button type="submit" class="edit-button">Save Changes</button>
+                <a href="{% url 'admin_people' %}" class="cancel-button">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
